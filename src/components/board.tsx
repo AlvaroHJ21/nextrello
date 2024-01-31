@@ -4,7 +4,9 @@ import { List } from '@/interfaces/List';
 import React, { useState } from 'react';
 import CardList from './card-list';
 import Button from './button';
-import { Card } from '@/interfaces/Card';
+
+import { createList, deleteList, updateList } from '@/actions/list.actions';
+import { createCard } from '@/actions/card.actions';
 
 interface Props {
   lists: List[];
@@ -13,48 +15,65 @@ interface Props {
 export default function Board(props: Props) {
   const [lists, setlists] = useState(props.lists);
 
-  function handleAddCard(title: string, listId: string) {
+  async function handleAddCard(title: string, listId: number) {
+    const card = await createCard(title, listId);
+
     const newLists = lists.map((list) => {
       if (list.id === listId) {
-        const newCard: Card = {
-          id: Math.random().toString(36).substr(2, 9),
-          title,
-          description: '',
-        };
-
         return {
           ...list,
-          card: [...list.card, newCard],
+          cards: [...list.cards, card],
         };
+      } else {
+        return list;
       }
-
-      return list;
     });
 
     setlists(newLists);
   }
 
-  function handleAddList() {
-    const newList: List = {
-      id: Math.random().toString(36).substr(2, 9),
-      title: 'New List',
-      card: [],
-    };
-
+  async function handleAddList() {
+    const newList = await createList('New List');
+    console.log(newList);
     setlists([...lists, newList]);
   }
 
+  async function handleDeleteList(listId: number) {
+    if (!confirm('Are you sure?')) return;
+
+    await deleteList(listId);
+    const newLists = lists.filter((list) => list.id !== listId);
+    setlists(newLists);
+  }
+
+  async function handleUpdateListTitle(listId: number, title: string) {
+    await updateList(listId, title);
+    const newLists = lists.map((list) => {
+      if (list.id === listId) {
+        return {
+          ...list,
+          title,
+        };
+      } else {
+        return list;
+      }
+    });
+    setlists(newLists);
+  }
+
   return (
-    <section className="flex container gap-4 items-start">
+    <section className="flex container gap-4 items-start overflow-x-auto flex-1 py-4">
       {lists.map((list) => (
         <CardList
           key={list.id}
           title={list.title}
-          cards={list.card}
+          cards={list.cards}
           onSaveNewCard={(value) => handleAddCard(value, list.id)}
+          onDeleteList={() => handleDeleteList(list.id)}
+          onUpdateListTitle={(value) => handleUpdateListTitle(list.id, value)}
         />
       ))}
-      <Button color="primary" onClick={handleAddList}>
+      <Button color="primary" onClick={handleAddList} className="min-w-60">
         Add list
       </Button>
     </section>

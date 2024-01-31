@@ -4,7 +4,7 @@ export const lists: List[] = [
   {
     id: '1',
     title: 'To Do',
-    card: [
+    cards: [
       {
         id: '1',
         title: 'Create a new project',
@@ -16,11 +16,11 @@ export const lists: List[] = [
   {
     id: '2',
     title: 'Doing',
-    card: [],
+    cards: [],
   },
   {
     id: '3',
     title: 'Done',
-    card: [],
+    cards: [],
   },
 ];

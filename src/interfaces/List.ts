@@ -1,7 +1,7 @@
 import { Card } from './Card';
 
 export interface List {
-  id: string;
+  id: number;
   title: string;
-  card: Card[];
+  cards: Card[];
 }

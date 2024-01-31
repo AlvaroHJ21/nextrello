@@ -1,5 +1,6 @@
 export interface Card {
-  id: string;
+  id: number;
   title: string;
   description: string;
+  list_id: number;
 }
