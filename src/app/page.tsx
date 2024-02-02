@@ -2,7 +2,6 @@ import { getAllLists } from '@/actions/list.actions';
 import Board from '@/components/board';
 
 export default async function Home() {
-  
   const lists = await getAllLists();
 
   return (
@@ -12,7 +11,6 @@ export default async function Home() {
       </div>
 
       <Board lists={lists} />
-
     </main>
   );
 }

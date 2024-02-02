@@ -3,4 +3,5 @@ export interface Card {
   title: string;
   description: string;
   list_id: number;
+  position: number;
 }

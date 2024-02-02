@@ -5,14 +5,15 @@ import { db } from '@/lib/mysql';
 
 export async function getAllLists(): Promise<List[]> {
   const results = await db.query<any[]>(`
-    SELECT 
-    lists.*, 
-    
+    SELECT
+    lists.*,
+
     JSON_ARRAYAGG(
       JSON_OBJECT(
           'id', cards.id,
           'title', cards.title,
-          'descripcion', cards.description
+          'descripcion', cards.description,
+          'position', cards.position
       )
     ) AS cards
 
@@ -24,11 +25,13 @@ export async function getAllLists(): Promise<List[]> {
       lists.id;
   `);
 
-  return results.map((result) => ({
+  const lists = results.map((result) => ({
     id: result.id,
-    cards: JSON.parse(result.cards) || [],
+    cards: (JSON.parse(result.cards) as any[]).filter((card) => card.id) || [],
     title: result.title,
   }));
+
+  return lists;
 }
 
 export async function createList(title: string): Promise<List> {

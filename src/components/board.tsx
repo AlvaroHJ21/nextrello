@@ -6,7 +6,8 @@ import CardList from './card-list';
 import Button from './button';
 
 import { createList, deleteList, updateList } from '@/actions/list.actions';
-import { createCard } from '@/actions/card.actions';
+import { createCard, updateCardsPosition } from '@/actions/card.actions';
+import { Card } from '@/interfaces/Card';
 
 interface Props {
   lists: List[];
@@ -61,6 +62,21 @@ export default function Board(props: Props) {
     setlists(newLists);
   }
 
+  async function handleReorderCards(listId: number, cards: Card[]) {
+    const newLists = lists.map((list) => {
+      if (list.id === listId) {
+        return {
+          ...list,
+          cards,
+        };
+      } else {
+        return list;
+      }
+    });
+    updateCardsPosition(cards);
+    setlists(newLists);
+  }
+
   return (
     <section className="flex container gap-4 items-start overflow-x-auto flex-1 py-4">
       {lists.map((list) => (
@@ -71,6 +87,7 @@ export default function Board(props: Props) {
           onSaveNewCard={(value) => handleAddCard(value, list.id)}
           onDeleteList={() => handleDeleteList(list.id)}
           onUpdateListTitle={(value) => handleUpdateListTitle(list.id, value)}
+          onReorderList={(cards) => handleReorderCards(list.id, cards)}
         />
       ))}
       <Button color="primary" onClick={handleAddList} className="min-w-60">

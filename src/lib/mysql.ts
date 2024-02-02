@@ -8,9 +8,9 @@ export const db = mysql({
     database: env.DB_DATABASE,
     user: env.DB_USER,
     password: env.DB_PASSWORD,
-    ssl: {
-      rejectUnauthorized: false,
-    },
+    // ssl: {
+    //   rejectUnauthorized: false,
+    // },
   },
 });
 

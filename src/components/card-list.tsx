@@ -1,6 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
+
+import { DndContext, DragEndEvent, closestCenter } from '@dnd-kit/core';
+import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import Card from './card';
 import Button from './button';
@@ -15,14 +18,17 @@ interface Props {
   cards: CardI[];
 
   onSaveNewCard?(value: string): void;
+  onReorderList?(cards: CardI[]): void;
   onDeleteList?(): void;
   onUpdateListTitle?(value: string): void;
 }
 
 export default function CardList(props: Props) {
-  const { title, cards, onSaveNewCard, onDeleteList, onUpdateListTitle } = props;
+  const { title, cards, onSaveNewCard, onDeleteList, onUpdateListTitle, onReorderList } = props;
 
   const [showNewCardEntry, setShowNewCardEntry] = useState(false);
+
+  const id = useId();
 
   function handleClickAddCard() {
     setShowNewCardEntry(!showNewCardEntry);
@@ -32,11 +38,25 @@ export default function CardList(props: Props) {
     onSaveNewCard?.(value);
   }
 
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+
+    if (!over) return;
+
+    if (active.id === over.id) return;
+
+    const oldIndex = cards.findIndex((card) => card.id === active.id);
+    const newIndex = cards.findIndex((card) => card.id === over.id);
+
+    const reorderedCards = arrayMove(cards, oldIndex, newIndex);
+
+    onReorderList?.(reorderedCards.map((card, index) => ({ ...card, position: index })));
+  }
+
   return (
     <section className="p-2 bg-gray-200 rounded-md shadow-md min-w-60">
       <div className="flex flex-col gap-2">
         <div className="flex items-center">
-          
           <div className="flex-1">
             <TextEditable value={title} onClickOutside={onUpdateListTitle} />
           </div>
@@ -54,9 +74,15 @@ export default function CardList(props: Props) {
           </Dropdown>
         </div>
 
-        {cards.map((card) => (
-          <Card key={card.id} card={card} />
-        ))}
+        <DndContext id={id} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={cards} strategy={verticalListSortingStrategy}>
+            {cards
+              .sort((a, b) => a.position - b.position)
+              .map((card) => (
+                <Card key={card.id} card={card} />
+              ))}
+          </SortableContext>
+        </DndContext>
 
         {showNewCardEntry && (
           <CardEntry onSave={handleAddNewCard} onClickOutside={() => setShowNewCardEntry(false)} />
