@@ -6,7 +6,7 @@ interface Props {
   onClickOutside?(): void;
 }
 
-export default function CardEntry(props: Props) {
+export default function NewEntry(props: Props) {
   const { onSave, onClickOutside } = props;
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -21,11 +21,9 @@ export default function CardEntry(props: Props) {
       const value = inputRef.current?.value.trim();
 
       if (value) {
-
         if (value.length === 0) return;
 
         onSave?.(value);
-        
       }
     }
 
@@ -41,10 +39,6 @@ export default function CardEntry(props: Props) {
       inputRef={inputRef}
       name=""
       placeholder="Introduzca un título para esta tarjeta..."
-      // value={value}
-      // onChange={(e) => {
-      //   setValue(e.target.value);
-      // }}
     ></InputArea>
   );
 }

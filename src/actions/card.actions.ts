@@ -41,15 +41,14 @@ export async function createCard(title: string, list_id: number): Promise<Card> 
 }
 
 export async function updateCardsPosition(cards: Card[]): Promise<void> {
-
-  const promises = cards.map((card) =>
+  const promises = cards.map((card, index) =>
     db.query(
       `
       UPDATE cards
-      SET position = ?
+      SET position = ?, list_id = ?
       WHERE id = ?
     `,
-      [card.position, card.id]
+      [index, card.list_id, card.id]
     )
   );
 

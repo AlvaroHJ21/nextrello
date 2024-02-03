@@ -1,9 +1,8 @@
 import { getAllLists } from '@/actions/list.actions';
-import Board from '@/components/board';
-import Board2 from '@/components/sortable/board';
+import Board from '@/components/sortable/board';
 
 export default async function Home() {
-  // const lists = await getAllLists();
+  const lists = await getAllLists();
 
   return (
     <main className="bg-gradient h-screen flex flex-col">
@@ -11,8 +10,7 @@ export default async function Home() {
         <h1 className="text-white font-black text-2xl text-center py-8">NexTrello</h1>
       </div>
 
-      {/* <Board lists={lists} /> */}
-      <Board2 />
+      <Board lists={lists} />
     </main>
   );
 }

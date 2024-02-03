@@ -1,8 +1,8 @@
 import { CSS } from '@dnd-kit/utilities';
-import { IItem } from './interfaces';
 import { useSortable } from '@dnd-kit/sortable';
+import { Card } from '@/interfaces/Card';
 
-export default function SortableItem(props: { item: IItem }) {
+export default function SortableItem(props: { item: Card }) {
   const { item } = props;
 
   const { attributes, listeners, setNodeRef, transition, transform } = useSortable({ id: item.id });
@@ -19,9 +19,11 @@ export default function SortableItem(props: { item: IItem }) {
       style={style}
       {...attributes}
       {...listeners}
-      className="bg-white p-4 m-2 rounded-md shadow-sm"
+      className="bg-white p-4 m-1 rounded-md shadow-sm"
     >
-      {item.name}
+      <div className="">
+        {item.position}: <span className="font-bold">{item.title}</span>
+      </div>
     </div>
   );
 }

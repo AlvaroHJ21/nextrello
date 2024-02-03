@@ -1,33 +1,35 @@
 'use server';
 
+import { Card } from '@/interfaces/Card';
 import { List } from '@/interfaces/List';
 import { db } from '@/lib/mysql';
 
 export async function getAllLists(): Promise<List[]> {
   const results = await db.query<any[]>(`
-    SELECT
+  SELECT
     lists.*,
 
-    JSON_ARRAYAGG(
-      JSON_OBJECT(
-          'id', cards.id,
-          'title', cards.title,
-          'descripcion', cards.description,
-          'position', cards.position
-      )
+    (SELECT JSON_ARRAYAGG(
+              JSON_OBJECT(
+                  'id', cards.id,
+                  'title', cards.title,
+                  'descripcion', cards.description,
+                  'position', cards.position,
+                  'list_id', cards.list_id
+              )
+          ) 
+          FROM cards 
+          WHERE lists.id = cards.list_id
+          ORDER BY cards.position 
     ) AS cards
 
-    FROM
-      lists
-    LEFT JOIN
-      cards ON lists.id = cards.list_id
-    GROUP BY
-      lists.id;
+  FROM
+    lists;
   `);
 
   const lists = results.map((result) => ({
     id: result.id,
-    cards: (JSON.parse(result.cards) as any[]).filter((card) => card.id) || [],
+    cards: (JSON.parse(result.cards ?? '[]') as Card[]).sort((a, b) => a.position - b.position),
     title: result.title,
   }));
 

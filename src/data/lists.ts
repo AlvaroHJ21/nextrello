@@ -11,6 +11,7 @@ export const lists: List[] = [
         description:
           'Proident cupidatat ea amet minim deserunt est nulla non labore aliquip amet dolore magna do.',
         list_id: 1,
+        position: 0,
       },
     ],
   },
