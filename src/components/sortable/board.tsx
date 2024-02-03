@@ -34,7 +34,6 @@ export default function Board() {
     },
   ]);
 
-  // TODO: FIX BUG: cuando se pasa un item a una lista vacia, se comporta rarete
   return (
     <section className="flex gap-8 p-20">
       <DndContext
@@ -63,8 +62,6 @@ export default function Board() {
   function handleDragOver(event: DragOverEvent) {
     const { active, over } = event;
 
-    console.log(event);
-
     if (!over) return;
 
     const { id: activeId } = active;
@@ -73,8 +70,6 @@ export default function Board() {
     // Find the containers
     const activeContainerId = findContainerId(activeId);
     const overContainerId = findContainerId(overId);
-
-    console.log({ activeContainerId, overContainerId });
 
     if (!activeContainerId || !overContainerId || activeContainerId === overContainerId) return;
 
