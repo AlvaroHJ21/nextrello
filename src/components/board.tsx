@@ -66,7 +66,7 @@ export default function Board(props: Props) {
   }
 
   return (
-    <section className="flex gap-2 p-20 items-start overflow-x-auto flex-1">
+    <section className="flex gap-2 p-8 items-start overflow-x-auto flex-1">
 
       <SortableBoard lists={lists} setLists={setLists}>
 

@@ -13,7 +13,7 @@ export async function getAllLists(): Promise<List[]> {
               JSON_OBJECT(
                   'id', cards.id,
                   'title', cards.title,
-                  'descripcion', cards.description,
+                  'description', cards.description,
                   'position', cards.position,
                   'list_id', cards.list_id
               )

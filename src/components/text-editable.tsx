@@ -36,13 +36,14 @@ export default function TextEditable(props: Props) {
   }
 
   return (
-    <div>
+    <div className='text-sm'>
       {editValue ? (
         <input
           type="text"
           value={editableValue}
           onChange={(e) => setEditableValue(e.target.value)}
-          className="text-editable px-2 py-1 w-full"
+          className="text-editable px-2 py-1 w-full font-bold bg-transparent"
+          autoFocus
         />
       ) : (
         <h2 className="font-bold" onClick={handleActiveEditTitle}>
