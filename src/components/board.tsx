@@ -2,12 +2,15 @@
 
 import React, { useState } from 'react';
 
-import { DndContext, closestCorners } from '@dnd-kit/core';
-import SortableList from './sortable-list';
-import useSortableLists from './useSortableLists';
-import Button from '../button';
 import { createCard } from '@/actions/card.actions';
 import { createList, deleteList, updateList } from '@/actions/list.actions';
+
+import Button from './button';
+import CardItem from './card-item';
+import CardList from './card-list';
+import SortableBoard from './sortable/sortable-board';
+import SortableItem from './sortable/sortable-item';
+import SortableList from './sortable/sortable-list';
 import { List } from '@/interfaces/List';
 
 interface Props {
@@ -16,11 +19,6 @@ interface Props {
 
 export default function Board(props: Props) {
   const [lists, setLists] = useState<List[]>(props.lists);
-
-  const { handleDragEnd, handleDragOver } = useSortableLists({
-    lists,
-    setLists,
-  });
 
   async function handleAddCard(title: string, listId: number) {
     const card = await createCard(title, listId);
@@ -68,28 +66,39 @@ export default function Board(props: Props) {
   }
 
   return (
-    <section className="flex gap-8 p-20 items-start overflow-x-auto flex-1">
-      <DndContext
-        id="0"
-        onDragOver={handleDragOver}
-        onDragEnd={handleDragEnd}
-        collisionDetection={closestCorners}
-      >
+    <section className="flex gap-2 p-20 items-start overflow-x-auto flex-1">
+
+      <SortableBoard lists={lists} setLists={setLists}>
+
         {lists.map((list) => (
-          <SortableList
-            key={list.id}
-            id={`container-${list.id}`}
-            title={list.title}
-            cards={list.cards}
-            onSaveNewCard={(value) => handleAddCard(value, list.id)}
-            onDeleteList={() => handleDeleteList(list.id)}
-            onUpdateListTitle={(value) => handleUpdateListTitle(list.id, value)}
-          />
+
+          <SortableList key={list.id} id={`container-${list.id}`} items={list.cards}>
+
+            <CardList
+              list={list}
+              onSaveNewCard={(value) => handleAddCard(value, list.id)}
+              onDeleteList={() => handleDeleteList(list.id)}
+              onUpdateListTitle={(value) => handleUpdateListTitle(list.id, value)}
+            >
+
+              {list.cards.map((card) => (
+                <SortableItem key={card.id} id={card.id}>
+
+                  <CardItem card={card} />
+                  
+                </SortableItem>
+              ))}
+
+            </CardList>
+
+          </SortableList>
         ))}
-        <Button color="primary" onClick={handleAddList} className="min-w-60">
-          Add list
-        </Button>
-      </DndContext>
+
+      </SortableBoard>
+
+      <Button color="primary" onClick={handleAddList} className="min-w-60">
+        Add list
+      </Button>
     </section>
   );
 }

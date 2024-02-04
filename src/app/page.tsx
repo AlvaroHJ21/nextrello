@@ -1,5 +1,5 @@
 import { getAllLists } from '@/actions/list.actions';
-import Board from '@/components/sortable/board';
+import Board from '@/components/board';
 
 export default async function Home() {
   const lists = await getAllLists();
