@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { Card } from '@/interfaces/Card';
 
 interface Props {
@@ -13,10 +12,11 @@ export default function CardItem(props: Props) {
   }
 
   return (
-    <div className="bg-white py-2 px-4 rounded-md shadow-sm text-gray-600 flex flex-col gap-1">
-      <h4 onClick={handleClickCard} className="text-sm">
-        {card.title}
-      </h4>
+    <div
+      onClick={handleClickCard}
+      className="bg-white py-2 px-4 rounded-md shadow-sm text-gray-600 flex flex-col gap-1 border-2 hover:border-blue-500"
+    >
+      <h4 className="text-sm">{card.title}</h4>
       <div className="flex gap-2 text-xs">
         {card.description && (
           <span>

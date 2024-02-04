@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { DndContext, closestCorners } from '@dnd-kit/core';
+import { DndContext, PointerSensor, closestCorners, useSensor, useSensors } from '@dnd-kit/core';
 
 import useSortableLists from './useSortableLists';
 import { List } from '@/interfaces/List';
@@ -21,12 +21,22 @@ export default function SortableBoard(props: Props) {
     setLists,
   });
 
+  // sensors es usado para detectar el movimiento del mouse
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    })
+  )
+
   return (
     <DndContext
       id="0"
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
       collisionDetection={closestCorners}
+      sensors={sensors}
     >
       {children}
     </DndContext>
