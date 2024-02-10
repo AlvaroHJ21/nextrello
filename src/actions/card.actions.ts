@@ -40,6 +40,19 @@ export async function createCard(title: string, list_id: number): Promise<Card> 
   };
 }
 
+export async function updateCard(card: Card): Promise<Card> {
+  await db.query(
+    `
+    UPDATE cards
+    SET title = ?, description = ?, list_id = ?, position = ?
+    WHERE id = ?
+  `,
+    [card.title, card.description, card.list_id, card.position, card.id]
+  );
+
+  return card;
+}
+
 export async function updateCardsPosition(cards: Card[]): Promise<void> {
   const promises = cards.map((card, index) =>
     db.query(
@@ -53,4 +66,14 @@ export async function updateCardsPosition(cards: Card[]): Promise<void> {
   );
 
   await Promise.all(promises);
+}
+
+export async function deleteCard(id: number): Promise<void> {
+  await db.query(
+    `
+    DELETE FROM cards
+    WHERE id = ?
+  `,
+    [id]
+  );
 }

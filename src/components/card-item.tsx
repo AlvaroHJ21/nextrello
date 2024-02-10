@@ -2,13 +2,14 @@ import { Card } from '@/interfaces/Card';
 
 interface Props {
   card: Card;
+  onOpenModal: (card: Card) => void;
 }
 
 export default function CardItem(props: Props) {
-  const { card } = props;
+  const { card, onOpenModal } = props;
 
   function handleClickCard() {
-    console.log(card.title);
+    onOpenModal(card);
   }
 
   return (
