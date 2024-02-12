@@ -37,6 +37,17 @@ export default function CardForm(props: Props) {
             />
           </div>
         </div>
+        <div className="flex gap-4">
+          <i className="fa fa-image"></i>
+          <div className="flex-1">
+            <TextEditable
+              value={card.image_url ?? ''}
+              onClickOutside={(value) => setCard({ ...card, image_url: value })}
+              textArea
+              placeholder="https://example.com/image.jpg"
+            />
+          </div>
+        </div>
         <div>
           <Button onClick={() => onSave?.(card)}>Save</Button>
         </div>

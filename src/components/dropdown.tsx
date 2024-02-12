@@ -35,7 +35,7 @@ export default function Dropdown(props: Props) {
         {children}
       </Button>
 
-      {show && <div className="absolute">{menu}</div>}
+      {show && <div className="absolute z-20">{menu}</div>}
     </div>
   );
 }

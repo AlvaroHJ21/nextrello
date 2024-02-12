@@ -44,10 +44,10 @@ export async function updateCard(card: Card): Promise<Card> {
   await db.query(
     `
     UPDATE cards
-    SET title = ?, description = ?, list_id = ?, position = ?
+    SET title = ?, description = ?, image_url = ?, list_id = ?, position = ?
     WHERE id = ?
   `,
-    [card.title, card.description, card.list_id, card.position, card.id]
+    [card.title, card.description, card.image_url, card.list_id, card.position, card.id]
   );
 
   return card;

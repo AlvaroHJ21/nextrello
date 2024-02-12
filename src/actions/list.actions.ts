@@ -14,6 +14,7 @@ export async function getAllLists(): Promise<List[]> {
                   'id', cards.id,
                   'title', cards.title,
                   'description', cards.description,
+                  'image_url', cards.image_url,
                   'position', cards.position,
                   'list_id', cards.list_id
               )

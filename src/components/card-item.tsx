@@ -15,18 +15,21 @@ export default function CardItem(props: Props) {
   return (
     <div
       onClick={handleClickCard}
-      className="bg-white py-2 px-4 rounded-md shadow-sm text-gray-600 flex flex-col gap-1 border-2 hover:border-blue-500"
+      className="bg-white rounded-md overflow-hidden shadow-sm text-gray-600 flex flex-col gap-1 border-2 hover:border-blue-500"
     >
-      <h4 className="text-sm">{card.title}</h4>
-      <div className="flex gap-2 text-xs">
-        {card.description && (
+      {card.image_url && <img src={card.image_url} alt="" />}
+      <div className="py-2 px-4">
+        <h4 className="text-sm">{card.title}</h4>
+        <div className="flex gap-2 text-xs">
+          {card.description && (
+            <span>
+              <i className="fa fa-align-left"></i>
+            </span>
+          )}
           <span>
-            <i className="fa fa-align-left"></i>
+            <i className="fa-regular fa-square-check"></i> {0}/{3}
           </span>
-        )}
-        <span>
-          <i className="fa-regular fa-square-check"></i> {0}/{3}
-        </span>
+        </div>
       </div>
     </div>
   );
