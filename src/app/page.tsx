@@ -1,5 +1,8 @@
 import { getAllLists } from '@/actions/list.actions';
+
 import Board from '@/components/board';
+
+export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   const lists = await getAllLists();

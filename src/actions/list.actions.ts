@@ -1,11 +1,10 @@
 'use server';
 
-import { Card } from '@/interfaces/Card';
 import { List } from '@/interfaces/List';
-import { db } from '@/lib/mysql';
+import { db } from '@/lib/mysql2';
 
 export async function getAllLists(): Promise<List[]> {
-  const results = await db.query<any[]>(`
+  const [results] = await db.query<any[]>(`
   SELECT
     lists.*,
 
@@ -28,23 +27,23 @@ export async function getAllLists(): Promise<List[]> {
     lists;
   `);
 
-  const lists = results.map((result) => ({
+  return (results as List[]).map((result) => ({
     id: result.id,
-    cards: (JSON.parse(result.cards ?? '[]') as Card[]).sort((a, b) => a.position - b.position),
+    cards: (result.cards ?? []).sort((a, b) => a.position - b.position),
     title: result.title,
   }));
-
-  return lists;
 }
 
 export async function createList(title: string): Promise<List> {
-  const resp = (await db.query(
+  const [result] = await db.query(
     `
     INSERT INTO lists (title, board_id)
     VALUES (?, 1)
   `,
     [title]
-  )) as { insertId: number };
+  );
+
+  const resp = result as { insertId: number };
 
   return {
     id: resp.insertId,

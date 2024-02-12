@@ -1,12 +1,13 @@
 'use server';
 
 import { Card } from '@/interfaces/Card';
-import { db } from '@/lib/mysql';
+import { db } from '@/lib/mysql2';
+import { RowDataPacket } from 'mysql2';
 
 export async function getAllCards(): Promise<Card[]> {
-  const results = await db.query<Card[]>('SELECT * FROM cards');
+  const [results] = await db.query<RowDataPacket[]>('SELECT * FROM cards');
 
-  return results.map((result) => ({
+  return (results as Card[]).map((result) => ({
     id: result.id,
     title: result.title,
     description: result.description,
@@ -16,23 +17,25 @@ export async function getAllCards(): Promise<Card[]> {
 }
 
 export async function createCard(title: string, list_id: number): Promise<Card> {
-  const lenghtList = (await db.query(
+  const [countResult] = await db.query(
     `
     SELECT COUNT(*) AS count FROM cards WHERE list_id = ?
   `,
     [list_id]
-  )) as { count: number }[];
+  );
 
-  const resp = (await db.query(
+  const lenghtList = countResult as { count: number }[];
+
+  const [insertResult] = await db.query(
     `
     INSERT INTO cards (title, list_id, position)
     VALUES (?, ?, ?)
   `,
     [title, list_id, lenghtList[0].count]
-  )) as { insertId: number };
+  );
 
   return {
-    id: resp.insertId,
+    id: (insertResult as { insertId: number }).insertId,
     title: title,
     description: '',
     list_id: list_id,
