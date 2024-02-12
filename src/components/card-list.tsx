@@ -30,11 +30,15 @@ export default function CardList(props: Props) {
   }
 
   return (
-    <div className="bg-gray-200 rounded-md shadow-md min-w-64">
+    <div className="bg-gray-200 rounded-md shadow-md w-64">
       {/* Header */}
       <div className="pt-2 px-3 flex items-center">
         <div className="flex-1">
-          <TextEditable value={list.title} onClickOutside={onUpdateListTitle} className='font-bold'/>
+          <TextEditable
+            value={list.title}
+            onClickOutside={onUpdateListTitle}
+            className="font-bold"
+          />
         </div>
 
         <Dropdown
